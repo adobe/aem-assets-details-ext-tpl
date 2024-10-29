@@ -98,7 +98,7 @@ function assertCodeContent(extensionManifest) {
         );
         assert.fileContent(
             `${webSrcFolder}/src/components/${panelFileName}.js`,
-            `export default function ${panelFileName} ()`
+            `export default function ${panelFileName}()`
         );
     });
 }
