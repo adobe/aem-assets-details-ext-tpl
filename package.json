@@ -42,7 +42,7 @@
     "lodash.clonedeep": "^4.5.0"
   },
   "peerDependencies": {
-    "@adobe/aio-cli-plugin-app-templates": "^1.0.0"
+    "@adobe/aio-cli-plugin-app-templates": "^1.0.0 || ^2.0.0"
   },
   "scripts": {
     "validate": "tv run-checks .",
