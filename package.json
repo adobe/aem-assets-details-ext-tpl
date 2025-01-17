@@ -12,7 +12,7 @@
   "author": "Adobe Inc.",
   "license": "Apache-2.0",
   "dependencies": {
-    "@adobe/generator-app-common-lib": "^0.4.0",
+    "@adobe/generator-app-common-lib": "^2.0.0",
     "chalk": "^4.0.0",
     "fs-extra": "^10.1.0",
     "slugify": "^1.6.5",
