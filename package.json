@@ -14,7 +14,7 @@
   "dependencies": {
     "@adobe/generator-app-common-lib": "^2.0.0",
     "chalk": "^4.0.0",
-    "fs-extra": "^10.1.0",
+    "fs-extra": "^11.0.0",
     "slugify": "^1.6.5",
     "yeoman-environment": "^3",
     "yeoman-generator": "^5"
