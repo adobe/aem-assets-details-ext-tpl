@@ -22,7 +22,7 @@
   "devDependencies": {
     "jest": "^28",
     "stdout-stderr": "^0.1.13",
-    "yeoman-test": "^6.3.0",
+    "yeoman-test": "^10.0.0",
     "js-yaml": "^4.1.0",
     "yeoman-assert": "^3.1.1",
     "yeoman-environment": "^3.2.0",
