@@ -16,7 +16,6 @@
     "chalk": "^4.0.0",
     "fs-extra": "^11.0.0",
     "slugify": "^1.6.5",
-    "yeoman-environment": "^3",
     "yeoman-generator": "^5"
   },
   "devDependencies": {
