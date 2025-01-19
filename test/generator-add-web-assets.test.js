@@ -86,6 +86,31 @@ function assertCodeContent(extensionManifest) {
     const detailsSidePanels = extensionManifest.detailsSidePanels || [];
 
     detailsSidePanels.forEach((panel) => {
+        assert.fileContent(
+            `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+            `'id': '${panel.id}'`
+        );
+        assert.fileContent(
+            `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+            `'tooltip': '${panel.tooltip}'`
+        );
+        assert.fileContent(
+            `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+            `'icon': '${panel.icon}'`
+        );
+        assert.fileContent(
+            `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+            `'title': '${panel.title}'`
+        );
+        assert.fileContent(
+            `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+            `'contentUrl': '/#${panel.id}'`
+        );
+        assert.fileContent(
+            `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+            `'reloadOnThemeChange': 'true'`
+        );
+
         const panelFileName = 'Panel' + panel.id.substring(0, 1).toUpperCase() + panel.id.substring(1);
 
         assert.fileContent(
