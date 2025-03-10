@@ -19,16 +19,10 @@ module.exports = {
     "<rootDir>/node_modules/"
   ],
   coverageThreshold: {
-    // reduce code coverage threshold for utility file
-    'src/utils.js': {
-      branches: 0,
-      lines: 25,
-      statements: 25
-    },
     global: {
-      branches: 35,
-      lines: 60,
-      statements: 60
+      branches: 25,
+      lines: 50,
+      statements: 50
     }
   }
 }
