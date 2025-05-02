@@ -141,7 +141,7 @@ const promptMainMenu = (manifest) => {
 // Prompts for panel metadata
 const nestedPanelsPrompts = (manifest, manifestNodeName) => {
     // First prompt for basic info
-    const basicQuestions = [tooltipPrompt(), titlePrompt(), iconPrompt()];
+    const basicQuestions = [tooltipPrompt(), titlePrompt(), iconPrompt(), modalPrompt()];
 
     return inquirer
         .prompt(basicQuestions)
@@ -150,6 +150,7 @@ const nestedPanelsPrompts = (manifest, manifestNodeName) => {
             if (basicAnswers.needsModal) {
                 // First get title and type
                 const mandatoryModalQuestions = [
+                    modalButtonLabelPrompt(),
                     modalTitlePrompt(),
                     modalTypePrompt()
                 ];
@@ -179,7 +180,7 @@ const nestedPanelsPrompts = (manifest, manifestNodeName) => {
                 .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                 .join('');
             if (answers.needsModal) {
-                answers.componentName = 'Modal' + answers.id.split('-')
+                answers.modalComponentName = 'Modal' + answers.id.split('-')
                     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                     .join('');
             }
@@ -355,8 +356,24 @@ const modalPrompt = () => {
     return {
         type: 'confirm',
         name: 'needsModal',
-        message: "Do you need to show a modal for the button?",
+        message: "Do you need to show a modal with a button?",
         default: false
+    };
+}
+
+// Helper prompts for the open for opening a modal dialog
+const modalButtonLabelPrompt = () => {
+    return {
+        type: 'input',
+        name: 'label',
+        message: 'Please provide label for the button:',
+        validate(answer) {
+            if (!answer.length) {
+                return 'Required.';
+            }
+
+            return true;
+        },
     };
 }
 
