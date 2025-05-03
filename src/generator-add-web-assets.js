@@ -125,6 +125,17 @@ class ExtensionWebAssetsGenerator extends Generator {
                     PanelComponentName: panelComponentName
                 }
             );
+
+            const customModals = panel.customModals || [];
+            customModals.forEach((modal) => {
+                const modalComponentName = modal.componentName;
+                this.fs.copyTpl(
+                    this.templatePath(relativeTemplatePath),
+                    this.destinationPath(path.join(this.destFolder, `./src/components/${modalComponentName}.js`)), {
+                        ModalComponentName: modalComponentName
+                    }
+                );
+            });
         })
     }
 }
