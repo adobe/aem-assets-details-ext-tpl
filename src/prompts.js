@@ -16,6 +16,33 @@ const chalk = require('chalk');
 
 inquirer.registerPrompt('autocomplete', autocompletePrompt);
 
+// Shared slugify configuration
+const SLUGIFY_CONFIG = {
+    replacement: '-',
+    remove: undefined,
+    lower: true,
+    strict: true,
+    locale: 'vi',
+    trim: true
+};
+
+// Helper function to generate component name from id
+const generateComponentName = (id) => {
+    return 'Modal' + id.split('-')
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join('');
+};
+
+// Helper function to process answers with common logic
+const processAnswers = (answers, manifest, manifestNodeName) => {
+    answers.id = slugify(answers.label, SLUGIFY_CONFIG);
+    if (answers.needsModal) {
+        answers.componentName = generateComponentName(answers.id);
+    }
+    manifest[manifestNodeName] = manifest[manifestNodeName] || [];
+    manifest[manifestNodeName].push(answers);
+};
+
 var exitMenu = false;
 
 const briefOverviews = {
@@ -102,6 +129,10 @@ const promptMainMenu = (manifest) => {
         {
             name: 'Add a side panel to the Details View',
             value: nestedPanelsPrompts.bind(this, manifest, 'detailsSidePanels'),
+        },
+        {
+            name: 'Add a button to the header menu',
+            value: nestedHeaderMenuPrompts.bind(this, manifest, 'headerMenuButtons'),
         },
         {
             name: 'Add server-side handler',
@@ -194,6 +225,98 @@ const titlePrompt = () => {
         },
     };
 }
+
+// Prompts for Header Menu metadata
+const nestedHeaderMenuPrompts = (manifest, manifestNodeName) => {
+    const basicQuestions = [labelPrompt('Header Menu button'), iconPrompt('Header Menu button'), modalPrompt()];
+
+    return inquirer
+        .prompt(basicQuestions)
+        .then((basicAnswers) => {
+            if (basicAnswers.needsModal) {
+                const mandatoryModalQuestions = [
+                    modalTitlePrompt(),
+                    modalTypePrompt()
+                ];
+
+                return inquirer.prompt(mandatoryModalQuestions).then((mandatoryModalAnswers) => {
+                    if (mandatoryModalAnswers.modalType === 'modal') {
+                        return inquirer.prompt(modalSizePrompt()).then((sizeAnswer) => {
+                            return {...basicAnswers, ...mandatoryModalAnswers, ...sizeAnswer};
+                        });
+                    }
+                    return {...basicAnswers, ...mandatoryModalAnswers};
+                });
+            }
+            return basicAnswers;
+        })
+        .then((answers) => {
+            processAnswers(answers, manifest, manifestNodeName);
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
+
+// Helper prompts for Header Menu button metadata
+const labelPrompt = (uiString = 'action') => {
+    return {
+        type: 'input',
+        name: 'label',
+        message: `Please provide label for the ${uiString}:`,
+        validate(answer) {
+            if (!answer.length) {
+                return 'Required.';
+            }
+            return true;
+        },
+    };
+};
+
+const modalPrompt = () => {
+    return {
+        type: 'confirm',
+        name: 'needsModal',
+        message: 'Do you need to show a modal for the action?',
+        default: false
+    };
+};
+
+const modalTitlePrompt = () => {
+    return {
+        type: 'input',
+        name: 'modalTitle',
+        message: 'Please provide the title for the modal:',
+        validate(answer) {
+            if (!answer.length) {
+                return 'Required.';
+            }
+            return true;
+        },
+    };
+};
+
+const modalTypePrompt = () => {
+    return {
+        type: 'list',
+        name: 'modalType',
+        message: 'Please select the type for the modal:',
+        default: 'modal',
+        choices: [
+            'modal',
+            'fullscreen'
+        ],
+    };
+};
+
+const modalSizePrompt = () => {
+    return {
+        type: 'list',
+        name: 'modalSize',
+        message: 'Please select the size for the modal:',
+        choices: ['S', 'M', 'L']
+    };
+};
 
 const workflowIcons = [
     '_123', '_3DMaterials', 'ABC', 'AEMScreens', 'Actions', 'AdDisplay', 'AdPrint', 'Add', 'AddCircle', 'AddTo',
@@ -309,11 +432,11 @@ const workflowIcons = [
     'WebPage', 'WebPages', 'Workflow', 'WorkflowAdd', 'Wrench', 'ZoomIn', 'ZoomOut'
 ];
 
-const iconPrompt = () => {
+const iconPrompt = (uiString = 'side panel') => {
     return {
         type: 'autocomplete',
         name: 'icon',
-        message: 'Please select React Spectrum icon for the side panel:',
+        message: `Please select React Spectrum icon for the ${uiString}:`,
         source: (answersSoFar, input) => {
             if (input) {
                 return Promise.resolve(workflowIcons.filter(icon => icon.toLowerCase().includes(input.toLowerCase())));
@@ -407,5 +530,6 @@ module.exports = {
     briefOverviews,
     promptTopLevelFields,
     promptMainMenu,
+    nestedHeaderMenuPrompts,
     promptDocs
 };
