@@ -26,11 +26,15 @@ const SLUGIFY_CONFIG = {
     trim: true
 };
 
-// Helper function to generate component name from id
-const generateComponentName = (id) => {
-    return 'Modal' + id.split('-')
+const pascalCaseFromKebab = (id) => {
+    return id.split('-')
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join('');
+};
+
+// Helper function to generate component name from id
+const generateComponentName = (id) => {
+    return 'Modal' + pascalCaseFromKebab(id);
 };
 
 // Helper function to process answers with common logic
@@ -184,9 +188,7 @@ const nestedPanelsPrompts = (manifest, manifestNodeName) => {
                 locale: 'vi',      // language code of the locale to use
                 trim: true         // trim leading and trailing replacement chars, defaults to `true`
             });
-            answers.componentName = 'Panel' + answers.id.split('-')
-                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                .join('');
+            answers.componentName = 'Panel' + pascalCaseFromKebab(answers.id);
             manifest[manifestNodeName] = manifest[manifestNodeName] || [];
             manifest[manifestNodeName].push(answers);
         })
