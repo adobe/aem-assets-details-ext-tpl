@@ -37,6 +37,23 @@ const customExtensionManifest = {
       "componentName": "PanelP2"
     }
   ],
+  "headerMenuButtons": [
+    {
+      "id": "h1",
+      "icon": "Settings",
+      "label": "Header Button 1",
+      "needsModal": true,
+      "modalTitle": "Header Settings",
+      "modalType": "modal",
+      "modalSize": "M",
+      "componentName": "Modalh1"
+    },
+    {
+      "id": "h2",
+      "icon": "Help",
+      "label": "Header Button 2"
+    }
+  ],
   "runtimeActions": [
     {
       "name": "attributes"

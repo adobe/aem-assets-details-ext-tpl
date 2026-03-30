@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 const inquirer = require('inquirer');
-const { promptTopLevelFields, promptMainMenu } = require('../src/prompts');
+const { promptTopLevelFields, promptMainMenu, nestedHeaderMenuPrompts } = require('../src/prompts');
 
 jest.mock('inquirer');
 
@@ -90,6 +90,63 @@ describe('prompts', () => {
                 choices: expect.any(Array)
             }));
             expect(mockAnswers.execute).toHaveBeenCalled();
+        });
+    });
+
+    describe('promptNestedHeaderMenuPrompts', () => {
+        it('should use custom label prompt message for header menu button', async () => {
+            const mockManifest = {};
+            const mockAnswers = {
+                label: 'Custom Header Button',
+                icon: 'Settings',
+                needsModal: false,
+            };
+
+            inquirer.prompt.mockResolvedValue(mockAnswers);
+
+            await nestedHeaderMenuPrompts(mockManifest, 'headerMenuButtons');
+
+            expect(inquirer.prompt).toHaveBeenCalledWith([
+                expect.objectContaining({
+                    type: 'input',
+                    name: 'label',
+                    message: 'Please provide label for the Header Menu button:',
+                    validate: expect.any(Function),
+                }),
+                expect.objectContaining({
+                    type: 'autocomplete',
+                    name: 'icon',
+                    message: 'Please select React Spectrum icon for the Header Menu button:',
+                    source: expect.any(Function),
+                }),
+                expect.objectContaining({
+                    type: 'confirm',
+                    name: 'needsModal',
+                    message: 'Do you need to show a modal for the action?',
+                    default: false,
+                }),
+            ]);
+        });
+
+        it('should store header menu buttons in correct manifest property', async () => {
+            const mockManifest = {};
+            const mockAnswers = {
+                label: 'Test Header Button',
+                icon: 'Help',
+                needsModal: false,
+            };
+
+            inquirer.prompt.mockResolvedValue(mockAnswers);
+
+            await nestedHeaderMenuPrompts(mockManifest, 'headerMenuButtons');
+
+            expect(mockManifest.headerMenuButtons).toBeDefined();
+            expect(mockManifest.headerMenuButtons).toHaveLength(1);
+
+            const addedButtons = mockManifest.headerMenuButtons[0];
+            expect(addedButtons.label).toBe('Test Header Button');
+            expect(addedButtons.icon).toBe('Help');
+            expect(addedButtons.id).toBe('test-header-button');
         });
     });
 });

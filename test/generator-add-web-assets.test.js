@@ -65,6 +65,15 @@ function assertFiles(extensionManifest) {
         const panelFileName = 'Panel' + panel.id.substring(0, 1).toUpperCase() + panel.id.substring(1);
         assert.file(`${webSrcFolder}/src/components/${panelFileName}.js`);
     });
+
+    // Assert generated header menu modal files
+    const headerMenuButtons = extensionManifest.headerMenuButtons || [];
+
+    headerMenuButtons.forEach((button) => {
+        if (button.needsModal) {
+            assert.file(`${webSrcFolder}/src/components/${button.componentName}.js`);
+        }
+    });
 }
 
 /**
@@ -125,6 +134,48 @@ function assertCodeContent(extensionManifest) {
             `${webSrcFolder}/src/components/${panelFileName}.js`,
             `export default function ${panelFileName}()`
         );
+    });
+
+    // for headerMenu
+    assert.fileContent(
+        `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+        'headerMenu: {'
+    );
+    assert.fileContent(
+        `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+        'getButtons({ context, resource }) {'
+    );
+    assert.fileContent(
+        `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+        'getHiddenHeaderButtonIds({ context, resource }) {'
+    );
+    assert.fileContent(
+        `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+        'overrideHeaderMenuButton({ buttonId, context, resource }) {'
+    );
+
+    const headerMenuButtons = extensionManifest.headerMenuButtons || [];
+
+    headerMenuButtons.forEach((button) => {
+        assert.fileContent(
+            `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+            `'id': '${button.id}'`
+        );
+        assert.fileContent(
+            `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+            `'icon': '${button.icon}'`
+        );
+        assert.fileContent(
+            `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+            `'label': '${button.label}'`
+        );
+
+        if (button.needsModal) {
+            assert.fileContent(
+                `${webSrcFolder}/src/components/App.js`,
+                `<Route path="modal-${button.id}" element={<${button.componentName} />} />`
+            );
+        }
     });
 }
 

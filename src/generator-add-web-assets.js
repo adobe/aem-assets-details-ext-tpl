@@ -54,6 +54,9 @@ class ExtensionWebAssetsGenerator extends Generator {
         // Generate React component files for side panels
         this._generatePanelFiles();
 
+        // Generate React component files for header menu modals
+        this._generateModalFiles('headerMenu');
+
         // add .babelrc
         /// NOTE this is a global file and might conflict
         this.fs.writeJSON(this.destinationPath('.babelrc'), {
@@ -125,6 +128,34 @@ class ExtensionWebAssetsGenerator extends Generator {
                     PanelComponentName: panelComponentName
                 }
             );
+        })
+    }
+
+    /**
+     * Generate files for modal dialog with respect to extension area
+     * @param extensionArea - extension area, e.g. headerMenu
+     * @private
+     */
+    _generateModalFiles(extensionArea) {
+        var relativeTemplatePath = './templates/_shared/stub-modal.ejs';
+        var customActions = [];
+
+        if (extensionArea === 'headerMenu') {
+            customActions = this.props.extensionManifest.headerMenuButtons || [];
+        }
+
+        customActions.forEach((action) => {
+            if (action.needsModal) {
+                const modalComponentName = action.componentName;
+                const modalType = action.modalType;
+                this.fs.copyTpl(
+                    this.templatePath(relativeTemplatePath),
+                    this.destinationPath(path.join(this.destFolder, `./src/components/${modalComponentName}.js`)), {
+                        modalComponentName: modalComponentName,
+                        modalType: modalType,
+                    }
+                );
+            }
         })
     }
 }

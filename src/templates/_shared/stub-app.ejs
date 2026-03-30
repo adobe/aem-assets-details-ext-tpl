@@ -10,6 +10,12 @@ import ExtensionRegistration from './ExtensionRegistration';
 <%_ detailsSidePanels.forEach((panel) => { -%>
 import <%- panel.componentName %> from './<%- panel.componentName %>';
 <%_ }) -%>
+<%_ const headerMenuButtons = extensionManifest.headerMenuButtons || [] -%>
+<%_ headerMenuButtons.forEach((button) => { -%>
+  <%_ if (button.needsModal) { -%>
+import <%- button.componentName %> from './<%- button.componentName %>';
+  <%_ } -%>
+<%_ }) -%>
 
 function App() {
   return (
@@ -21,6 +27,12 @@ function App() {
           <%_ if (extensionManifest.detailsSidePanels) { -%>
             <%_ extensionManifest.detailsSidePanels.forEach((panel) => { -%>
           <Route path="<%- panel.id %>" element={<<%- panel.componentName %> />} />
+          <%_ })} -%>
+          <%_ if (extensionManifest.headerMenuButtons) { -%>
+            <%_ extensionManifest.headerMenuButtons.forEach((button) => { -%>
+              <%_ if (button.needsModal) { -%>
+          <Route path="modal-<%- button.id %>" element={<<%- button.componentName %> />} />
+              <%_ } -%>
           <%_ })} -%>
           // YOUR CUSTOM ROUTES SHOULD BE HERE
         </Routes>
