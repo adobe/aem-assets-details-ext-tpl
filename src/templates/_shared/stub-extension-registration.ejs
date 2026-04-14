@@ -31,7 +31,7 @@ function ExtensionRegistration() {
           },
         },
         headerMenu: {
-          getButtons({ context, resource }) {
+          async getButtons({ context, resource }) {
             // YOUR HEADER MENU BUTTONS SHOULD BE RETURNED IN THE ARRAY
             return [
               <%_ if (extensionManifest.headerMenuButtons) { -%>
@@ -57,10 +57,10 @@ function ExtensionRegistration() {
               <%_ })} -%>
             ];
           },
-          getHiddenButtonIds({ context, resource }) {
+          async getHiddenButtonIds({ context, resource }) {
             return [];
           },
-          overrideButton({ buttonId, context, resource }) {
+          async overrideButton({ buttonId, context, resource }) {
             // perform some custom tasks
             // return true to skip built-in handler; return false to use built-in handler
             return false;
