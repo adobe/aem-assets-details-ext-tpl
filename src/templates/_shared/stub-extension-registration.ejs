@@ -57,14 +57,6 @@ function ExtensionRegistration() {
               <%_ })} -%>
             ];
           },
-          getHiddenHeaderButtonIds({ context, resource }) {
-            return [];
-          },
-          overrideHeaderMenuButton({ buttonId, context, resource }) {
-            // perform some custom tasks
-            // return true to skip built-in handler; return false to use built-in handler
-            return false;
-          },
         },
       },
     });
