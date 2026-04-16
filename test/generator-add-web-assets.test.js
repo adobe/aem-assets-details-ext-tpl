@@ -143,9 +143,16 @@ function assertCodeContent(extensionManifest) {
     );
     assert.fileContent(
         `${webSrcFolder}/src/components/ExtensionRegistration.js`,
-        'getButtons({ context, resource }) {'
+        'async getButtons({ context, resource }) {'
     );
-
+    assert.fileContent(
+        `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+        'async getHiddenButtonIds({ context, resource }) {'
+    );
+    assert.fileContent(
+        `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+        'async overrideButton({ buttonId, context, resource }) {'
+    );
 
     const headerMenuButtons = extensionManifest.headerMenuButtons || [];
 
