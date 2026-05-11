@@ -97,27 +97,27 @@ function assertCodeContent(extensionManifest) {
     detailsSidePanels.forEach((panel) => {
         assert.fileContent(
             `${webSrcFolder}/src/components/ExtensionRegistration.js`,
-            `'id': '${panel.id}'`
+            `id: '${panel.id}'`
         );
         assert.fileContent(
             `${webSrcFolder}/src/components/ExtensionRegistration.js`,
-            `'tooltip': '${panel.tooltip}'`
+            `tooltip: '${panel.tooltip}'`
         );
         assert.fileContent(
             `${webSrcFolder}/src/components/ExtensionRegistration.js`,
-            `'icon': '${panel.icon}'`
+            `icon: '${panel.icon}'`
         );
         assert.fileContent(
             `${webSrcFolder}/src/components/ExtensionRegistration.js`,
-            `'title': '${panel.title}'`
+            `title: '${panel.title}'`
         );
         assert.fileContent(
             `${webSrcFolder}/src/components/ExtensionRegistration.js`,
-            `'contentUrl': '/#${panel.id}'`
+            `contentUrl: '/#${panel.id}'`
         );
         assert.fileContent(
             `${webSrcFolder}/src/components/ExtensionRegistration.js`,
-            `'reloadOnThemeChange': 'true'`
+            'reloadOnThemeChange: true'
         );
 
         const panelFileName = 'Panel' + panel.id.substring(0, 1).toUpperCase() + panel.id.substring(1);
@@ -135,6 +135,23 @@ function assertCodeContent(extensionManifest) {
             `export default function ${panelFileName}()`
         );
     });
+
+    assert.fileContent(
+        `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+        'getPanels({ resource })'
+    );
+    assert.fileContent(
+        `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+        `getHiddenBuiltInPanels({ resource }) {
+            return [];
+          }`
+    );
+    assert.fileContent(
+        `${webSrcFolder}/src/components/ExtensionRegistration.js`,
+        `overrideBuiltInPanel({ panelId, resource }) {
+            return null;
+          }`
+    );
 
     // for headerMenu
     assert.fileContent(

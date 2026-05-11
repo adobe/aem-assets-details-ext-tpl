@@ -13,21 +13,27 @@ function ExtensionRegistration() {
       id: extensionId,
       methods: {
         detailSidePanel: {
-          getPanels() {
+          getPanels({ resource }) {
             // YOUR SIDE PANELS CODE SHOULD BE HERE
             return [
               <%_ if (extensionManifest.detailsSidePanels) { -%>
                 <%_ extensionManifest.detailsSidePanels.forEach((panel) => { -%>
               {
-                'id': '<%- panel.id %>',
-                'tooltip': '<%- panel.tooltip %>',
-                'icon': '<%- panel.icon %>',
-                'title': '<%- panel.title %>',
-                'contentUrl': '/#<%- panel.id %>',
-                'reloadOnThemeChange': 'true',
+                id: '<%- panel.id %>',
+                tooltip: '<%- panel.tooltip %>',
+                icon: '<%- panel.icon %>',
+                title: '<%- panel.title %>',
+                contentUrl: '/#<%- panel.id %>',
+                reloadOnThemeChange: true,
               },
               <%_ })} -%>
             ];
+          },
+          getHiddenBuiltInPanels({ resource }) {
+            return [];
+          },
+          overrideBuiltInPanel({ panelId, resource }) {
+            return null;
           },
         },
         headerMenu: {
