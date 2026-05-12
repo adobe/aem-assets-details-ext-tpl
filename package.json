@@ -19,7 +19,7 @@
     "yeoman-generator": "^5"
   },
   "devDependencies": {
-    "jest": "^29.0.0",
+    "jest": "^30.0.0",
     "stdout-stderr": "^0.1.13",
     "yeoman-test": "^6.3.0",
     "js-yaml": "^4.1.0",
